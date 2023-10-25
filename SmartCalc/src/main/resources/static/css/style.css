@@ -1,0 +1,111 @@
+/*
+    colors:
+    bg #000
+    orange #ff9501
+    grey #a6a6a6
+    white #fdfdfd
+*/
+.calculator {
+    margin: 30px auto;
+    width: 450px;
+    height: 600px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background: #430202;
+    color: #fff;
+    font-family: Arial;
+    padding: 20px;
+    box-shadow: 4px 4px 4px #4f4f4f;
+
+}
+
+.calc-screen{
+    border:2px solid aliceblue;
+    border-radius: 20px;
+    border-color: aliceblue;
+    height: 125px;
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-top: 3px;
+    
+    display: grid;
+    justify-items: end;
+    /* align-items: end; */
+    font-size: 1.5rem;
+}
+
+.buttons{
+    display: grid;
+    grid-template-areas:
+    "graph x e bracketLeft bracketRight pow mod"
+    "sqrt ln log seven eight nine division"
+    "sin cos tan four five six multiply"
+    "asin acos atan one two three minus"
+    "inputX inputX inputX zero dot calc plus"
+    ;
+     grid-gap: 7px;
+    justify-items: center;
+}
+
+.inputX {
+    grid-area: 6 / 1 / 6 / 4;
+    width: 100%;
+    font-size: 1.5rem;
+    padding-top: 10px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+ }
+
+
+.inX {
+    font-size: 1.5rem;
+    height: 30px;
+    width: 135px;
+    background: #a6a6a6;
+    color: #fff;
+    border:1px solid #fff;
+    border-radius: 5px;
+ }
+
+.btn {
+    width: 60px;
+    height: 60px;
+    background: #333;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn.empty {
+    width: 100%;
+    background: #7e3789;
+}
+
+
+.btn:hover{
+    filter: brightness(120%);
+}
+
+.btn:active{
+    filter: brightness(90%);
+}
+
+.btn.bg-grey{
+    background: #a6a6a6;
+}
+
+.btn.bg-orange{
+    background: #ff9501;
+}
+
+.btn.bg-red{
+    background: #a50909;
+}
+
+.btn.bg-green{
+    background: #2d4e21;
+}
