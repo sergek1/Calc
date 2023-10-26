@@ -44,7 +44,7 @@
             <div id="btn_4" class="btn four">4</div>
             <div id="btn_5" class="btn five">5</div>
             <div id="btn_6" class="btn six">6</div>
-            <div id="btn_multiply" class="btn multiply bg-orange">x</div>
+            <div id="btn_multiply" class="btn multiply bg-orange">*</div>
 
             <div id="btn_asin" class="btn asin bg-grey">asin</div>
             <div id="btn_acos" class="btn acos bg-grey">acos</div>
@@ -72,15 +72,14 @@
         const digit = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         const action = ['-', '+', '÷', 'x'];
 
-        var is_digit = true, is_sign = false, is_right_bracket = false, is_left_bracket = false,
+        let is_digit = true, is_sign = false, is_close_bracket = false, is_open_bracket = false,
             is_point = false, is_minus = false, is_x = false, is_e = false;
-        var left_brackets_count = 0, right_brackets_count = 0;
+        let open_brackets_count = 0, close_brackets_count = 0;
 
-        var key = '';
+        let key = '';
+        let point = '.'
         const out = document.querySelector('.calc-screen p')
-        // out.textContent = '0';
 
-        
         function clearAll() {
             output = '';
             b = '';
@@ -88,134 +87,324 @@
             finish = false;
             out.textContent = '0';
         }
-        
-        
-        // document.querySelector('.buttons').onclick = (event) => {
-        //     if (!event.target.classList.contains('btn')) return;
-
-        //     if (event.target.classList.contains('cleanAll')) clearAll();
-
-
-        //     // out.textContent = key;
-
-        //     key = event.target.textContent;
-        //     output+=key;
-        //     out.textContent  =output;
-        //     // document.getElementById("btn_1").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_2").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_3").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_4").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_5").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_6").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_7").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_8").addEventListener("click", digitPressed);
-        //     // document.getElementById("btn_9").addEventListener("click", digitPressed);
-
-        //     // // if (digit.includes(key) || action.includes(key)){
-        //     //     a+=key;
-        //     //     console.log(a,b,sign);
-        //     //     out.textContent = a;
-        //     // }
-        //     // if(key === '='){
-
-        //     // }
-        // }
-
 
 
         document.getElementById("btn_0").addEventListener("click", nullPressed);
-        document.getElementById("btn_1").addEventListener("click", function(){
+        document.getElementById("btn_1").addEventListener("click", function () {
             digitPressed('1');
-        } );
-        document.getElementById("btn_2").addEventListener("click", digitPressed);
-        document.getElementById("btn_3").addEventListener("click", digitPressed);
-        document.getElementById("btn_4").addEventListener("click", digitPressed);
-        document.getElementById("btn_5").addEventListener("click", digitPressed);
-        document.getElementById("btn_6").addEventListener("click", digitPressed);
-        document.getElementById("btn_7").addEventListener("click", digitPressed);
-        document.getElementById("btn_8").addEventListener("click", digitPressed);
-        document.getElementById("btn_9").addEventListener("click", digitPressed);
-        document.getElementById("btn_exp").addEventListener("click", digitPressed);
-        document.getElementById("btn_plus").addEventListener("click", signPressed);
-        document.getElementById("btn_minus").addEventListener("click", signPressed);
-        document.getElementById("btn_multiply").addEventListener("click", signPressed);
-        document.getElementById("btn_division").addEventListener("click", signPressed);
-        document.getElementById("btn_pow").addEventListener("click", signPressed);
-        document.getElementById("btn_mod").addEventListener("click", signPressed);
-        document.getElementById("btn_sqrt").addEventListener("click", functionPressed);
-        document.getElementById("btn_ln").addEventListener("click", functionPressed);
-        document.getElementById("btn_log").addEventListener("click", functionPressed);
-        document.getElementById("btn_sin").addEventListener("click", functionPressed);
-        document.getElementById("btn_cos").addEventListener("click", functionPressed);
-        document.getElementById("btn_tan").addEventListener("click", functionPressed);
-        document.getElementById("btn_asin").addEventListener("click", functionPressed);
-        document.getElementById("btn_acos").addEventListener("click", functionPressed);
-        document.getElementById("btn_atan").addEventListener("click", functionPressed);
+        });
+        document.getElementById("btn_2").addEventListener("click", function () {
+            digitPressed('2');
+        });
+        document.getElementById("btn_3").addEventListener("click", function () {
+            digitPressed('3');
+        });
+        document.getElementById("btn_4").addEventListener("click", function () {
+            digitPressed('4');
+        });
+        document.getElementById("btn_5").addEventListener("click", function () {
+            digitPressed('5');
+        });
+        document.getElementById("btn_6").addEventListener("click", function () {
+            digitPressed('6');
+        });
+        document.getElementById("btn_7").addEventListener("click", function () {
+            digitPressed('7');
+        });
+        document.getElementById("btn_8").addEventListener("click", function () {
+            digitPressed('8');
+        });
+        document.getElementById("btn_9").addEventListener("click", function () {
+            digitPressed('9');
+        });
+        document.getElementById("btn_e").addEventListener("click", function () {
+            digitPressed('e');
+        });
+
+        document.getElementById("btn_plus").addEventListener("click", function () {
+            signPressed('+');
+        });
+        document.getElementById("btn_minus").addEventListener("click", function () {
+            signPressed('-');
+        });
+        document.getElementById("btn_multiply").addEventListener("click", function () {
+            signPressed('*')
+        });
+        document.getElementById("btn_division").addEventListener("click", function () {
+            signPressed('÷');
+        });
+        document.getElementById("btn_pow").addEventListener("click", function () {
+            signPressed('^');
+        });
+        document.getElementById("btn_mod").addEventListener("click", function () {
+            signPressed('mod');
+        });
+        document.getElementById("btn_sqrt").addEventListener("click", function () { functionPressed('sqrt(') });
+        document.getElementById("btn_ln").addEventListener("click", function () { functionPressed('ln(') });
+        document.getElementById("btn_log").addEventListener("click", function () { functionPressed('log(') });
+        document.getElementById("btn_sin").addEventListener("click", function () { functionPressed('sin(') });
+        document.getElementById("btn_cos").addEventListener("click", function () { functionPressed('cos(') });
+        document.getElementById("btn_tan").addEventListener("click", function () { functionPressed('tan(') });
+        document.getElementById("btn_asin").addEventListener("click", function () { functionPressed('asin(') });
+        document.getElementById("btn_acos").addEventListener("click", function () { functionPressed('acos(') });
+        document.getElementById("btn_atan").addEventListener("click", function () { functionPressed('atan(') });
         document.getElementById("btn_dot").addEventListener("click", dotPressed);
         document.getElementById("btn_bracket_open").addEventListener("click", bracketOpenPressed);
         document.getElementById("btn_bracket_close").addEventListener("click", bracketClosePressed);
         document.getElementById("btn_x").addEventListener("click", xPressed);
+        document.getElementById("btn_equal").addEventListener("click", equalPressed);
+        document.getElementById("btn_clean_one").addEventListener("click", cleanOnePressed);
+        document.getElementById("btn_clean_all").addEventListener("click", cleanAllPressed);
 
-
-        function digitPressed(keyTxt) {
-            // var size = output.length;
-            // document.getElementById('expression').value += value;
-            // key = event.target.textContent;
-            output+=keyTxt;
-            // if (key == 'e') {
-            //     if (!is_e && !is_sign && output.substring(size - 1, size) != 'e' && is_digit) {
-            //         output += key;
-            //         // ui -> label -> setText(output_);
-            //         is_sign = is_e = true;
-            //         is_digit = false;
-            //     }
-            // } else {
-            //     if (output.substring(size - 1, size) == '0' &&
-            //         !(digit.contains(output.substring(size - 2, size - 1))))
-            //         output = output.substring(0, size - 1);
-            //     if (output == "0" || output == "nan" || output == "inf" || output == "-inf") {
-            //         output = "";
-            //         output = key;
-            //         // ui -> label -> setText(output_);
-            //     } else {
-            //         if (is_x || is_right_bracket) output_ += '*';
-            //         if (output_.substring(size - 1, size) == '-'
-            //             && output_.substring(size - 2, size) == 'e') is_e = true;
-            //         output += key;
-            //         // ui -> label -> setText(output);
-            //     }
-            //     is_digit = true;
-            //     is_minus = is_left_bracket = is_right_bracket = is_x = is_sign = false;
-            // }
+        function cleanAllPressed() {
+            output = "";
             out.textContent = output;
+            left_brackets_count = right_brackets_count = 0;
+            whatPressed();
         }
+
+        function cleanOnePressed() {
+            let size = output.length;
+            let str1 = "sqrtacosasinatan", str2 = "cossintanlog", str3 = "modinfnan";
+            if (str1.includes(output.substring(size - 5, size - 1)) && size > 4) {
+                output = output.substring(0, size - 5);
+                is_open_bracket = false;
+                left_brackets_count -= 1;
+            } else if (str2.includes(output.substring(size - 4, size - 1)) && size > 3) {
+                output = output.substring(0, size - 4);
+                is_open_bracket = false;
+                left_brackets_count -= 1;
+            } else if (output.substring(size - 3, size - 1) === "ln(") {
+                output = output.substring(0, size - 3);
+                is_open_bracket = false;
+                left_brackets_count -= 1;
+            } else if (output.substring(size - 4, size - 1) === "-inf") {
+                output = output.substring(0, size - 4);
+            } else if (str3.includes(output.substring(size - 3, size - 1))) {
+                output = output.substring(0, size - 3);
+            } else {
+                if (output.substring(size - 1) === '(') {
+                    left_brackets_count -= 1;
+                } else if (output.charAt(size - 1) === ')') {
+                    right_brackets_count -= 1;
+                }
+                output = output.substring(0, size - 1);
+            }
+            out.textContent = output;
+            whatPressed();
+        }
+
+        function whatPressed() {
+            let size = output.length;
+            is_digit = is_sign = is_point = is_right_bracket = is_left_bracket = is_minus = is_x = is_e = false;
+            if (size > 0) {
+                if (digit.includes(output[size - 1])) {
+                    is_digit = true;
+                } else if (output[size - 1] === '(') {
+                    is_left_bracket = true;
+                } else if (output[size - 1] === ')') {
+                    is_right_bracket = true;
+                } else if (output[size - 1] === point) {
+                    is_point = true;
+                } else if (output[size - 1] === 'x') {
+                    is_x = true;
+                } else if (output[size - 1] === 'e') {
+                    is_e = true;
+                } else if (output.substring(size - 1) === '-') {
+                    let signs = "*÷m";
+                    if (signs.includes(output.substring(size - 2))) is_minus = true;
+                } else {
+                    is_sign = true;
+                }
+            }
+        }
+
+        function equalPressed() {
+            let size = output.length;
+            if (size && !is_sign && !is_open_bracket && output[size - 1] !== '-') {
+                for (let i = 0; i < open_brackets_count - close_brackets_count; i++) {
+                    output += ")";
+                }
+                // let res;
+                // if (output.includes('x')) {
+                //     let x_value = ui.lineEdit.text();
+                //     x_value = x_value.replace(/,/g, ".");
+                //     let x = parseFloat(x_value);
+                //     res = controller_.GetResult(output, x);
+                // } else {
+                //     res = controller_.GetResult(output);
+                // }
+                // output = "";
+                // output = res.toPrecision(9).toString();
+                // output = output.replace(/\./g, point);
+                out.textContent = output;
+                whatPressed();
+                is_point = output.includes(point);
+                is_e = output.includes('e');
+                open_brackets_count = close_brackets_count = 0;
+            }
+        }
+
+        function signPressed(text) {
+            // output += text;
+            // out.textContent = output;
+            if (output !== "nan" && output !== "inf" && output !== "-inf") {
+                var size = output.length;
+                console.log(size);
+                if (is_digit || is_close_bracket || is_x) {
+                    if (output[size - 1] != 'e') {
+                        console.log(size);
+                        output += text;
+                        out.textContent = output;
+                    }
+                    is_sign = true;
+                    is_close_bracket = is_x = false;
+                } else if ((is_open_bracket || !output) && text === "-") {
+                    output += text;
+                    out.textContent = output;
+                } else if ((is_e || is_sign) && !is_minus) {
+                    if (text === "-") {
+                        if ((output[size - 1] === '*' || output[size - 1] === '/' || output[size - 1] === 'd' ||
+                            output[size - 1] === 'e') &&
+                            output[size - 1] !== '^') {
+                            is_minus = true;
+                        } else {
+                            output = output.substring(0, size - 1);
+                        }
+                        output += text;
+                        out.textContent = output;
+                    } else {
+                        if (output[size - 1] === 'd')
+                            output = output.substring(0, size - 3);
+                        else
+                            output = output.substring(0, size - 1);
+                        output += text;
+                        out.textContent = output;
+                    }
+                }
+                is_point = is_open_bracket = is_digit = is_e = false;
+            }
+        }
+
+        function digitPressed(key) {
+            var size = output.length;
+            if (key === 'e') {
+                if (!is_e && !is_sign && output.substring(size - 1, size) != 'e' && is_digit) {
+                    output += key;
+                    out.textContent = output;
+                    is_sign = is_e = true;
+                    is_digit = false;
+                }
+            } else {
+                if (output.substring(size - 1, size) === '0' &&
+                    !(digit.includes(key))) {
+                    output = output.substring(0, size - 1);
+                }
+
+                if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
+                    output = "";
+                    output = key;
+                    out.textContent = output;
+                } else {
+                    if (is_x || is_close_bracket) output += '*';
+                    if (output.substring(size - 1, size) === '-'
+                        && output.substring(size - 2, size) === 'e') is_e = true;
+                    output += key;
+                    out.textContent = output;
+                }
+                is_digit = true;
+                is_minus = is_open_bracket = is_close_bracket = is_x = is_sign = false;
+            }
+            // out.textContent = output;
+        }
+
 
         function nullPressed() {
+            const text = '0';
+            var size = output.length;
+            if (is_close_bracket || is_x) {
+                output += "*";
+                is_close_bracket = is_x = false;
+            }
+            if (!(output.substring(size - 1, size) === '0' && output.substring(size - 2, size - 1) !== point &&
+                !(digit.includes(output.substring(size - 2, size - 1)))
+            )) {
+                output += text;
+            }
+            is_sign = false;
+            is_digit = true;
+            out.textContent = output;
 
         }
 
-        function signPressed() {
-
-        }
-
-        function functionPressed() {
+        function functionPressed(text) {
+            // output += func;
+            // out.textContent = output;
+            if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
+                output = "";
+            }
+            if (output.substring(output.length - 1) !== 'e') {
+                if ((is_digit || is_point || is_close_bracket || is_x) && output.length != 0) {
+                    output += '*';
+                }
+                output += text;
+                out.textContent = output;
+                open_brackets_count++;
+                is_open_bracket = true;
+                is_point = is_digit = is_close_bracket = is_x = false;
+            }
 
         }
 
         function dotPressed() {
-
+            output += '.';
+            out.textContent = output;
         }
 
         function bracketOpenPressed() {
+            const text = '(';
+
+            if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
+                output = "";
+            }
+            var size = output.length;
+            if (size == 0 || (output.substring(size - 1) != 'e' && output.substring(size - 2, size) != "e-")) {
+                if ((is_digit || is_point || is_close_bracket || output.substring(size - 1) === 'x') && size != 0) {
+                    output += '*';
+                }
+                open_brackets_count++;
+                output += text;
+                out.textContent = output;
+                is_open_bracket = true, is_digit = is_close_bracket = is_sign = is_point = false;
+            }
 
         }
 
         function bracketClosePressed() {
+            const text = ')';
 
+            if (open_brackets_count > close_brackets_count) {
+                if ((is_digit || is_close_bracket || is_x) && !is_sign) {
+                    close_brackets_count++;
+                    output += text;
+                    out.textContent = output;
+                    is_close_bracket = true, is_digit = is_point = is_x = false;
+                }
+            }
         }
 
         function xPressed() {
-
+            if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
+                output = "";
+            }
+            if ((is_digit || is_close_bracket || is_x || is_point)
+                && output.length !== 0 && !is_sign && !is_open_bracket) {
+                output += "*";
+            }
+            output += "x";
+            is_digit = is_sign = is_close_bracket = is_open_bracket = is_point = false;
+            is_x = true;
+            out.textContent = output;
         }
     </script>
 
