@@ -1,17 +1,18 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Calculator</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css" th:href="@{/css/style.css}">
 </head>
 
 <body>
     <div class="calculator">
         <div class="calc-screen">
-            <p>0</p>
-
+            <p class="p1" th:text="${expression}">0</p>
+            <p id="rez" class="p2" th:text="${result}">0</p>
         </div>
         <div class="buttons">
             <div class="btn.none empty"></div>
@@ -22,7 +23,13 @@
             <div id="btn_clean_one" class="btn cleanOne">--</div>
             <div id="btn_clean_all" class="btn cleanAll">AC</div>
 
-            <div id="btn_graph" class="btn graph bg-green">graph</div>
+            <!-- <div id="btn_graph" class="btn graph bg-green">graph</div> -->
+            <form action="/graph">
+                <input id="graphId" type="hidden" name="expression" value="">
+                <button id="btn_graph" class="btn graph bg-green" type="submit">graph</button>
+            </form>
+
+
             <div id="btn_x" class="btn x bg-grey">x</div>
             <div id="btn_e" class="btn e bg-grey">e</div>
             <div id="btn_bracket_open" class="btn bracketOpen">(</div>
@@ -59,16 +66,24 @@
             </div>
             <div id="btn_0" class="btn zero">0</div>
             <div id="btn_dot" class="btn dot">.</div>
-            <div id="btn_equal" class="btn equal bg-red">=</div>
+
+            <!-- <div id="btn_equal" class="btn equal bg-red">=</div> -->
+
+
+
+            <form action="/calculate">
+                <input id="ff" type="hidden" name="expression" value="">
+                <button id="btn_equal" class="btn equal bg-red" type="submit">=</button>
+            </form>
+
+
             <div id="btn_plus" class="btn plus bg-orange">+</div>
         </div>
     </div>
 
     <script>
-        let output = '0';
-        let b = '';
-        let sign = '';
-        let finish = false;
+        let output = document.getElementById("rez").textContent;
+
         const digit = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         const action = ['-', '+', '÷', 'x'];
 
@@ -76,17 +91,8 @@
             is_point = false, is_minus = false, is_x = false, is_e = false;
         let open_brackets_count = 0, close_brackets_count = 0;
 
-        let key = '';
-        let point = '.'
-        const out = document.querySelector('.calc-screen p')
-
-        function clearAll() {
-            output = '';
-            b = '';
-            sign = '';
-            finish = false;
-            out.textContent = '0';
-        }
+        let point = '.';
+        const out = document.querySelector('.p2');
 
 
         document.getElementById("btn_0").addEventListener("click", nullPressed);
@@ -136,9 +142,7 @@
         document.getElementById("btn_pow").addEventListener("click", function () {
             signPressed('^');
         });
-        document.getElementById("btn_mod").addEventListener("click", function () {
-            signPressed('mod');
-        });
+        document.getElementById("btn_mod").addEventListener("click", function () { signPressed('mod'); });
         document.getElementById("btn_sqrt").addEventListener("click", function () { functionPressed('sqrt(') });
         document.getElementById("btn_ln").addEventListener("click", function () { functionPressed('ln(') });
         document.getElementById("btn_log").addEventListener("click", function () { functionPressed('log(') });
@@ -152,15 +156,22 @@
         document.getElementById("btn_bracket_open").addEventListener("click", bracketOpenPressed);
         document.getElementById("btn_bracket_close").addEventListener("click", bracketClosePressed);
         document.getElementById("btn_x").addEventListener("click", xPressed);
-        document.getElementById("btn_equal").addEventListener("click", equalPressed);
+        
         document.getElementById("btn_clean_one").addEventListener("click", cleanOnePressed);
         document.getElementById("btn_clean_all").addEventListener("click", cleanAllPressed);
+        document.getElementById("btn_equal").addEventListener("click", equalPressed);
+        document.getElementById("btn_graph").addEventListener("click", graphPressed);
 
         function cleanAllPressed() {
             output = "";
             out.textContent = output;
             left_brackets_count = right_brackets_count = 0;
+            console.log(is_point);
             whatPressed();
+        }
+
+        function graphPressed() {
+            document.getElementById('graphId').setAttribute('value', output);
         }
 
         function cleanOnePressed() {
@@ -217,6 +228,7 @@
                     is_sign = true;
                 }
             }
+            console.log(is_point);
         }
 
         function equalPressed() {
@@ -238,6 +250,13 @@
                 // output = res.toPrecision(9).toString();
                 // output = output.replace(/\./g, point);
                 out.textContent = output;
+
+
+
+                document.getElementById('ff').setAttribute('value', output);
+
+
+
                 whatPressed();
                 is_point = output.includes(point);
                 is_e = output.includes('e');
@@ -246,8 +265,6 @@
         }
 
         function signPressed(text) {
-            // output += text;
-            // out.textContent = output;
             if (output !== "nan" && output !== "inf" && output !== "-inf") {
                 var size = output.length;
                 console.log(size);
@@ -287,6 +304,7 @@
         }
 
         function digitPressed(key) {
+            console.log(is_point);
             var size = output.length;
             if (key === 'e') {
                 if (!is_e && !is_sign && output.substring(size - 1, size) != 'e' && is_digit) {
@@ -315,7 +333,6 @@
                 is_digit = true;
                 is_minus = is_open_bracket = is_close_bracket = is_x = is_sign = false;
             }
-            // out.textContent = output;
         }
 
 
@@ -334,12 +351,9 @@
             is_sign = false;
             is_digit = true;
             out.textContent = output;
-
         }
 
         function functionPressed(text) {
-            // output += func;
-            // out.textContent = output;
             if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
                 output = "";
             }
@@ -357,13 +371,24 @@
         }
 
         function dotPressed() {
-            output += '.';
-            out.textContent = output;
+            var size = (output.length != 0) ? (output.length - 1) : 0;
+            is_point = false;
+            while (size > 0 && ((digit.includes(output[size])) || output[size] === point)) {
+                if (output[size] === point) {
+                    is_point = true;
+                    out.textContent = output;
+                }
+                size--;
+            }
+            if (is_digit && !is_point && !is_close_bracket) {
+                is_point = true;
+                output += point;
+                out.textContent = output;
+            }
         }
 
         function bracketOpenPressed() {
             const text = '(';
-
             if (output === "0" || output === "nan" || output === "inf" || output === "-inf") {
                 output = "";
             }

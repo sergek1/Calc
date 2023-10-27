@@ -19,31 +19,37 @@
 
 }
 
-.calc-screen{
-    border:2px solid aliceblue;
+.calc-screen {
+    border: 2px solid aliceblue;
     border-radius: 20px;
     border-color: aliceblue;
     height: 125px;
     margin-bottom: 10px;
     padding: 10px;
     padding-top: 3px;
-    
+
     display: grid;
     justify-items: end;
     /* align-items: end; */
     font-size: 1.5rem;
 }
 
-.buttons{
+.p1 {
+    color: #a6a6a6;
+    font-size: 1rem;
+}
+
+
+.buttons {
     display: grid;
     grid-template-areas:
-    "graph x e bracketLeft bracketRight pow mod"
-    "sqrt ln log seven eight nine division"
-    "sin cos tan four five six multiply"
-    "asin acos atan one two three minus"
-    "inputX inputX inputX zero dot calc plus"
+        "graph x e bracketLeft bracketRight pow mod"
+        "sqrt ln log seven eight nine division"
+        "sin cos tan four five six multiply"
+        "asin acos atan one two three minus"
+        "inputX inputX inputX zero dot calc plus"
     ;
-     grid-gap: 7px;
+    grid-gap: 7px;
     justify-items: center;
 }
 
@@ -55,7 +61,7 @@
     padding-right: 0px;
     padding-bottom: 10px;
     padding-left: 10px;
- }
+}
 
 
 .inX {
@@ -64,15 +70,15 @@
     width: 135px;
     background: #a6a6a6;
     color: #fff;
-    border:1px solid #fff;
+    border: 1px solid #fff;
     border-radius: 5px;
- }
+}
 
 .btn {
     width: 60px;
     height: 60px;
     background: #333;
-    border-radius: 50%;
+    border-radius: 40%;
     text-align: center;
     line-height: 60px;
     font-size: 1.5rem;
@@ -86,26 +92,26 @@
 }
 
 
-.btn:hover{
+.btn:hover {
     filter: brightness(120%);
 }
 
-.btn:active{
+.btn:active {
     filter: brightness(90%);
 }
 
-.btn.bg-grey{
+.btn.bg-grey {
     background: #a6a6a6;
 }
 
-.btn.bg-orange{
+.btn.bg-orange {
     background: #ff9501;
 }
 
-.btn.bg-red{
+.btn.bg-red {
     background: #a50909;
 }
 
-.btn.bg-green{
+.btn.bg-green {
     background: #2d4e21;
 }
