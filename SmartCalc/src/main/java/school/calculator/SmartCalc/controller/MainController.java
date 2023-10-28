@@ -1,5 +1,7 @@
 package school.calculator.SmartCalc.controller;
 
+//import javafx.util.Pair;
+import ch.qos.logback.core.joran.sanity.Pair;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,6 @@ public class MainController{
 //        allHistory.removeIf(Objects::isNull);
 //        allHistory.removeIf(String::isEmpty);
 //        model.addAttribute("allHistory", allHistory);
-
         return "calculator";
     }
 
@@ -38,8 +39,15 @@ public class MainController{
 
     @GetMapping("/graph")
     public String graph(@RequestParam String expression, @NotNull Model model) {
-        // model.addAttribute("expression", expression+ " = ");
-        // model.addAttribute("result", expression);
+        model.addAttribute("expression", expression);
+//        int[] x = {1, 2, 3};
+//        int[] y = {4, 5, 6};
+//        Pair<Integer, Integer>[] pairs = new Pair[x.length];
+//        for (int i = 0; i < x.length; i++) {
+//            pairs[i] = new Pair<>(x[i], y[i]);
+//        }
+
+        model.addAttribute("data", data);
         return "graph";
     }
 
