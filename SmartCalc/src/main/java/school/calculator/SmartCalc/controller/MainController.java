@@ -1,16 +1,10 @@
 package school.calculator.SmartCalc.controller;
 
 //import javafx.util.Pair;
-import ch.qos.logback.core.joran.sanity.Pair;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Objects;
+import org.springframework.web.bind.annotation.*;
 
+/*
 @Controller
 public class MainController{
 
@@ -39,7 +33,7 @@ public class MainController{
 
     @GetMapping("/graph")
     public String graph(@RequestParam String expression, @NotNull Model model) {
-        model.addAttribute("expression", expression);
+//        model.addAttribute("expression", expression);
 //        int[] x = {1, 2, 3};
 //        int[] y = {4, 5, 6};
 //        Pair<Integer, Integer>[] pairs = new Pair[x.length];
@@ -47,8 +41,25 @@ public class MainController{
 //            pairs[i] = new Pair<>(x[i], y[i]);
 //        }
 
-        model.addAttribute("data", data);
+//        model.addAttribute("data", data);
         return "graph";
     }
 
+}*/
+
+@RestController
+public class MainController {
+
+//    @PostMapping("/calculate")
+//    public String calculate(@RequestBody CalculatorRequest request) {
+//        try {
+//            // Реализуйте здесь вашу бизнес-логику для вычисления выражения
+//            // double result = performCalculation(expression);
+//            return request.getExpression();
+//        } catch (Exception e) {
+//            return "Error: " + e.getMessage();
+//        }
+//    }
+
 }
+
