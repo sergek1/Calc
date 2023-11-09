@@ -1,7 +1,5 @@
 package school.calculator.SmartCalc.controller;
 
-//import javafx.util.Pair;
-
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -48,18 +46,17 @@ public class MainController{
 }*/
 
 @RestController
+@CrossOrigin
 public class MainController {
-
-//    @PostMapping("/calculate")
-//    public String calculate(@RequestBody CalculatorRequest request) {
-//        try {
-//            // Реализуйте здесь вашу бизнес-логику для вычисления выражения
-//            // double result = performCalculation(expression);
-//            return request.getExpression();
-//        } catch (Exception e) {
-//            return "Error: " + e.getMessage();
-//        }
-//    }
-
+    @GetMapping ("/calculate")
+    @ResponseBody
+    public String calculate(@RequestParam String expression) {
+        try {
+            System.out.println("LLL");
+            return "fdf " + expression;
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
 }
 

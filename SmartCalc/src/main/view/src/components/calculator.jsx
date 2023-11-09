@@ -23,16 +23,21 @@ class Calculator extends Component {
   }
 
   handleFormSubmit = (event) => {
-    this.setState({ expression: this.state.result+" = " });
+    this.setState({ expression: this.state.result + " = " });
     event.preventDefault();
 
-    axios.post('http://localhost:8080/calculate', { result: this.state.result })
-      .then((response) => {
-        this.setState({ result: response.data });
+    let url = `http://localhost:8080/calculate?expression=${this.state.result}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(response => response.text())
+      .then((body) => {
+        console.log(body);
+        this.setState({ result: body });
       })
-      .catch((error) => {
-        console.error(error);
-      });
+
   };
 
   digitPressed = (key) => {
