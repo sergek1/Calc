@@ -1,5 +1,4 @@
 #include "smart_calc_model.h"
-// using s21::SmartCalcModel;
 
 SmartCalcModel::SmartCalcModel(double xBegin, double xEnd, const std::string &str) {
     CalculateGraphPoints(xBegin, xEnd, str);
@@ -10,6 +9,7 @@ SmartCalcModel::SmartCalcModel(double credit_amount, int months, double interest
 }
 
 double SmartCalcModel::GetCalcResult(std::string input) {
+    std::cout<<"HEREEERERERERERER"<<std::endl;
     std::string output = ConvertToRPN(std::move(input));
     double res = CalculateOnStack(output);
     return res;
@@ -133,6 +133,7 @@ void SmartCalcModel::Brackets(std::stack<char> *stack, std::string *output) {
 }
 
 void SmartCalcModel::OperationsAndFunctions(char sym, std::stack<char> *stack, std::string *output) {
+    std::cout<<"OperationsAndFunctions"<<std::endl;
     char b = stack->top();
     std::string signs = "/*m^uabcdfghjk", signs1 = "+-/*m^uabcdfghjk";
     if (sym == '/' || sym == '*' || sym == 'm') {
@@ -166,7 +167,7 @@ double SmartCalcModel::CalculateOnStack(std::string output) {
     std::string signs = "+-*/m^";
     for (unsigned int i = 0; i < output.size() - 1; ++i) {
         char sym = output[i];
-        if (output[i].isDigit() {
+        if (std::isdigit(output[i])) {
             std::string number;
             while (std::regex_match(std::string(1, output[i]), std::regex("([\\d.,e-])")))
                 number += output[i++];
@@ -210,6 +211,7 @@ void SmartCalcModel::CalcUnaryOperations(char sym, std::stack<double> *stack) {
     double a = stack->top();
     stack->pop();
     if (sym == 'a') {
+        std::cout<<"cos"<<std::endl;
         a = cos(a);
     } else if (sym == 'b') {
         a = sin(a);

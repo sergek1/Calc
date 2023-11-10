@@ -23,10 +23,37 @@ class Calculator extends Component {
   }
 
   handleFormSubmit = (event) => {
-    this.setState({ expression: this.state.result + " = " });
-    event.preventDefault();
+    console.log(this.open_brackets_count);
+    const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
+    this.open_brackets_count = 0;
+    this.close_brackets_count = 0;
+    this.setState((prevState) => {
+      return {
+        result: prevState.result + additionalBrackets,
+      };
+    }, () => {
+      event.preventDefault();
+      let result = this.state.result
+      let encodedExpression = encodeURIComponent(result);
+      let url = `http://localhost:8080/calculate?expression=${encodedExpression}`;
 
-    let url = `http://localhost:8080/calculate?expression=${this.state.result}`;
+      fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then(response => response.text())
+        .then((body) => {
+          console.log(body);
+          this.setState({ result: body });
+        });
+    }
+    );
+    this.setState((prevState) => ({ expression: prevState.result + "=" }));
+  };
+  makeRequest = () => {
+    let result = this.state.result
+    let encodedExpression = encodeURIComponent(result);
+    let url = `http://localhost:8080/calculate?expression=${encodedExpression}`;
 
     fetch(url, {
       method: "GET",
@@ -37,8 +64,7 @@ class Calculator extends Component {
         console.log(body);
         this.setState({ result: body });
       })
-
-  };
+  }
 
   digitPressed = (key) => {
     const size = this.state.result.length;
@@ -54,7 +80,7 @@ class Calculator extends Component {
         this.setState((prevState) => ({ result: prevState.result.substring(0, size - 1), }));
       }
 
-      if (this.state.result === "0" || this.state.result === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+      if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
         this.setState({ result: key });
       } else {
         if (this.is_x || this.is_close_bracket) {
@@ -72,7 +98,7 @@ class Calculator extends Component {
   };
 
   signPressed = (text) => {
-    if (this.state.result !== "nan" && this.state.result !== "inf" && this.state.result !== "-inf") {
+    if (this.state.result.toLocaleLowerCase() !== "nan" && this.state.result !== "inf" && this.state.result !== "-inf") {
       const size = this.state.result.length;
       if (this.is_digit || this.is_close_bracket || this.is_x) {
         if (this.state.result.charAt(size - 1) !== 'e') {
@@ -125,11 +151,12 @@ class Calculator extends Component {
   };
 
   functionPressed = (text) => {
-    if (this.state.result === "0" || this.state.result === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
-      this.setState({ result: "" });
+    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+      this.cleanAllPressed()
     }
     if (this.state.result.charAt(this.state.result.length - 1) !== 'e') {
       if ((this.is_digit || this.is_point || this.is_close_bracket || this.is_x) && this.state.result.length !== 0) {
+        console.log("len" + this.state.result.length);
         this.setState((prevState) => ({ result: prevState.result + '*', }));
       }
       this.setState((prevState) => ({ result: prevState.result + text, }));
@@ -156,7 +183,7 @@ class Calculator extends Component {
 
   bracketOpenPressed = () => {
     const text = '(';
-    if (this.state.result === "0" || this.state.result === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
       this.cleanAllPressed();
     }
     const size = this.state.result.length;
@@ -185,7 +212,7 @@ class Calculator extends Component {
   };
 
   xPressed = () => {
-    if (this.state.result === "0" || this.state.result === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
       this.setState({ result: "" });
     }
     if ((this.is_digit || this.is_close_bracket || this.is_x || this.is_point) &&
@@ -228,7 +255,7 @@ class Calculator extends Component {
       this.setState((prevState) => ({
         result: prevState.result.slice(0, size - 4),
       }));
-    } else if (str3.includes(this.state.result.slice(size - 3, size))) {
+    } else if (str3.includes(this.state.result.slice(size - 3, size).toLocaleLowerCase())) {
       this.setState((prevState) => ({
         result: prevState.result.slice(0, size - 3),
       }));
@@ -316,9 +343,9 @@ class Calculator extends Component {
           <div id="btn_9" className="btn nine" onClick={() => this.digitPressed("9")}>9</div>
           <div id="btn_division" className="btn division bg-orange" onClick={() => this.signPressed("÷")}>÷</div>
 
-          <div id="btn_sin" className="btn sin bg-grey" onClick={() => this.functionPressed("sin")}>sin</div>
-          <div id="btn_cos" className="btn cos bg-grey" onClick={() => this.functionPressed("cos")}>cos</div>
-          <div id="btn_tan" className="btn tan bg-grey" onClick={() => this.functionPressed("tan")}>tan</div>
+          <div id="btn_sin" className="btn sin bg-grey" onClick={() => this.functionPressed("sin(")}>sin</div>
+          <div id="btn_cos" className="btn cos bg-grey" onClick={() => this.functionPressed("cos(")}>cos</div>
+          <div id="btn_tan" className="btn tan bg-grey" onClick={() => this.functionPressed("tan(")}>tan</div>
           <div id="btn_4" className="btn four" onClick={() => this.digitPressed("4")}>4</div>
           <div id="btn_5" className="btn five" onClick={() => this.digitPressed("5")}>5</div>
           <div id="btn_6" className="btn six" onClick={() => this.digitPressed("6")}>6</div>

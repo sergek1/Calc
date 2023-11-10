@@ -1,6 +1,6 @@
 #ifndef SMARTCALCMODEL_H
 #define SMARTCALCMODEL_H
-
+#include <iostream>
 #include <cmath>
 #include <regex>
 #include <sstream>
@@ -12,7 +12,6 @@
 #define qpoint ','
 #endif
 
-// namespace s21 {
 class SmartCalcModel {
 public:
     SmartCalcModel(){};

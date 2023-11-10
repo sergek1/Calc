@@ -1,6 +1,8 @@
 package school.calculator.SmartCalc.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import school.calculator.SmartCalc.model.SmartCalcModelJNI;
 
 /*
 @Controller
@@ -48,15 +50,67 @@ public class MainController{
 @RestController
 @CrossOrigin
 public class MainController {
-    @GetMapping ("/calculate")
+//    @Autowired
+//    SmartCalcModelJNI model;
+
+    @GetMapping("/calculate")
     @ResponseBody
     public String calculate(@RequestParam String expression) {
         try {
-            System.out.println("LLL");
-            return "fdf " + expression;
+            SmartCalcModelJNI model = new SmartCalcModelJNI();
+
+            System.out.println("{"+expression+"}");
+            double result = model.GetCalcResult(transformString(expression));
+            System.out.println(result);
+            return String.valueOf(result);
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
+    private String transformString(String input) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (i < input.length()) {
+            if (input.startsWith("acos", i)) {
+                result.append("d(");
+                i += 4;
+            } else if (input.startsWith("asin", i)) {
+                result.append("f(");
+                i += 4;
+            } else if (input.startsWith("atan", i)) {
+                result.append("g(");
+                i += 4;
+            } else if (input.startsWith("cos", i)) {
+                result.append("a(");
+                i += 3;
+            } else if (input.startsWith("sin", i)) {
+                result.append("b(");
+                i += 3;
+            } else if (input.startsWith("tan", i)) {
+                result.append("c(");
+                i += 3;
+            } else if (input.startsWith("sqrt", i)) {
+                result.append("h(");
+                i += 4;
+            } else if (input.startsWith("ln", i)) {
+                result.append("j(");
+                i += 2;
+            } else if (input.startsWith("log", i)) {
+                result.append("k(");
+                i += 3;
+            } else if (input.startsWith("mod", i)) {
+                result.append("m");
+                i += 3;
+            } else if (input.charAt(i) == 'x' ) {
+//                result.append("(").append(x).append(")");
+                i++;
+            } else {
+                result.append(input.charAt(i));
+                i++;
+            }
+        }
+        return result.toString();
+    }
+
 }
 

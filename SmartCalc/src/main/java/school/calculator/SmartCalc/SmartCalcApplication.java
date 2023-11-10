@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SmartCalcApplication {
 
 	public static void main(String[] args) {
-		
 		SpringApplication.run(SmartCalcApplication.class, args);
 	}
 
