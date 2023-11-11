@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import school.calculator.SmartCalc.model.SmartCalcModelJNI;
 
+import java.lang.Math;
+
 /*
 @Controller
 public class MainController{
@@ -59,7 +61,7 @@ public class MainController {
         try {
             SmartCalcModelJNI model = new SmartCalcModelJNI();
 
-            System.out.println("{"+expression+"}");
+            System.out.println("{" + expression + "}");
             double result = model.GetCalcResult(transformString(expression));
             System.out.println(result);
             return String.valueOf(result);
@@ -67,6 +69,22 @@ public class MainController {
             return "Error: " + e.getMessage();
         }
     }
+
+    @GetMapping("/graph")
+    @ResponseBody
+    public String graph(@RequestParam String expression) {
+        try {
+////            SmartCalcModelJNI model = new SmartCalcModelJNI();
+            System.out.println("graph for: " + expression);
+//            System.out.println("{" + expression + "}");
+////            double result = model.GetCalcResult(transformString(expression));
+////            System.out.println(result);
+            return expression;
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
     private String transformString(String input) {
         StringBuilder result = new StringBuilder();
         int i = 0;
@@ -101,7 +119,7 @@ public class MainController {
             } else if (input.startsWith("mod", i)) {
                 result.append("m");
                 i += 3;
-            } else if (input.charAt(i) == 'x' ) {
+            } else if (input.charAt(i) == 'x') {
 //                result.append("(").append(x).append(")");
                 i++;
             } else {

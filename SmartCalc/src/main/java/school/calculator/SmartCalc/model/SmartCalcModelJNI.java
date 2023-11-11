@@ -7,9 +7,8 @@ import java.io.File;
 //@Component
 public class SmartCalcModelJNI {
     static {
-        String parentDir = "school/calculator/SmartCalc/model/";
+        String parentDir = "src/main/java/school/calculator/SmartCalc/model/";
         System.load(new File(parentDir, "model.so").getAbsolutePath());
     }
-
     public native double GetCalcResult(String input);
 }

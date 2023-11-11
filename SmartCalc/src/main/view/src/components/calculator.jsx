@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expression: '',
-      result: "0"
+      expression: '9',
+      result: "0",
+      x: "1"
     };
     this.digit = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     this.is_digit = true;
@@ -23,7 +26,6 @@ class Calculator extends Component {
   }
 
   handleFormSubmit = (event) => {
-    console.log(this.open_brackets_count);
     const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
     this.open_brackets_count = 0;
     this.close_brackets_count = 0;
@@ -33,7 +35,10 @@ class Calculator extends Component {
       };
     }, () => {
       event.preventDefault();
-      let result = this.state.result
+      let { result, x } = this.state;
+      if (result.includes("x")) {
+        result = result.replace(/x/g, x);
+      }
       let encodedExpression = encodeURIComponent(result);
       let url = `http://localhost:8080/calculate?expression=${encodedExpression}`;
 
@@ -50,21 +55,18 @@ class Calculator extends Component {
     );
     this.setState((prevState) => ({ expression: prevState.result + "=" }));
   };
-  makeRequest = () => {
-    let result = this.state.result
-    let encodedExpression = encodeURIComponent(result);
-    let url = `http://localhost:8080/calculate?expression=${encodedExpression}`;
 
-    fetch(url, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(response => response.text())
-      .then((body) => {
-        console.log(body);
-        this.setState({ result: body });
-      })
+  handleInputChange = (event) => {
+    const value = event.target.value;
+    if (/^-?\d*(\.\d{0,7})?$/.test(value)) {
+      this.setState({ x: value });
+    }
   }
+
+  handleGraphButtonClick = () => {
+    this.props.history.push(`/graph?expression=${this.state.result}`);
+
+  };
 
   digitPressed = (key) => {
     const size = this.state.result.length;
@@ -80,7 +82,7 @@ class Calculator extends Component {
         this.setState((prevState) => ({ result: prevState.result.substring(0, size - 1), }));
       }
 
-      if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+      if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "Infinity" || this.state.result === "-Infinity") {
         this.setState({ result: key });
       } else {
         if (this.is_x || this.is_close_bracket) {
@@ -98,7 +100,7 @@ class Calculator extends Component {
   };
 
   signPressed = (text) => {
-    if (this.state.result.toLocaleLowerCase() !== "nan" && this.state.result !== "inf" && this.state.result !== "-inf") {
+    if (this.state.result.toLocaleLowerCase() !== "nan" && this.state.result !== "Infinity" && this.state.result !== "-Infinity") {
       const size = this.state.result.length;
       if (this.is_digit || this.is_close_bracket || this.is_x) {
         if (this.state.result.charAt(size - 1) !== 'e') {
@@ -111,7 +113,7 @@ class Calculator extends Component {
       } else if ((this.is_e || this.is_sign) && !this.is_minus) {
         if (text === "-") {
           if (this.state.result.charAt(size - 1) === '*' ||
-            this.state.result.charAt(size - 1) === '÷' ||
+            this.state.result.charAt(size - 1) === '/' ||
             this.state.result.charAt(size - 1) === 'd' ||
             this.state.result.charAt(size - 1) === 'e') {
             if (this.state.result.charAt(size - 1) !== '^') {
@@ -151,15 +153,16 @@ class Calculator extends Component {
   };
 
   functionPressed = (text) => {
-    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
-      this.cleanAllPressed()
-    }
+    this.WhatPressed();
     if (this.state.result.charAt(this.state.result.length - 1) !== 'e') {
-      if ((this.is_digit || this.is_point || this.is_close_bracket || this.is_x) && this.state.result.length !== 0) {
-        console.log("len" + this.state.result.length);
-        this.setState((prevState) => ({ result: prevState.result + '*', }));
+      if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "Infinity" || this.state.result === "-Infinity") {
+        this.setState({ result: text });
+      } else {
+        if ((this.is_digit || this.is_point || this.is_close_bracket || this.is_x) && this.state.result.length !== 0) {
+          this.setState((prevState) => ({ result: prevState.result + '*', }));
+        }
+        this.setState((prevState) => ({ result: prevState.result + text, }));
       }
-      this.setState((prevState) => ({ result: prevState.result + text, }));
       this.open_brackets_count++;
       this.is_open_bracket = true;
       this.is_point = this.is_digit = this.is_close_bracket = this.is_x = false;
@@ -183,7 +186,7 @@ class Calculator extends Component {
 
   bracketOpenPressed = () => {
     const text = '(';
-    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "Infinity" || this.state.result === "-Infinity") {
       this.cleanAllPressed();
     }
     const size = this.state.result.length;
@@ -212,11 +215,14 @@ class Calculator extends Component {
   };
 
   xPressed = () => {
-    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "inf" || this.state.result === "-inf") {
+    this.WhatPressed();
+    if (this.state.result === "0" || this.state.result.toLocaleLowerCase() === "nan" || this.state.result === "Infinity" || this.state.result === "-Infinity") {
       this.setState({ result: "" });
-    }
-    if ((this.is_digit || this.is_close_bracket || this.is_x || this.is_point) &&
+    } else if ((this.is_digit || this.is_close_bracket || this.is_x || this.is_point) &&
       this.state.result.length !== 0 && !this.is_sign && !this.is_open_bracket) {
+      console.log(this.is_x + "is_x");
+      console.log(this.is_sign + "is_sign");
+      console.log(this.is_open_bracket + "is_open_bracket");
       this.setState((prevState) => ({ result: prevState.result + "*", }));
     }
     this.setState((prevState) => ({ result: prevState.result + "x", }));
@@ -234,42 +240,31 @@ class Calculator extends Component {
     const size = this.state.result.length;
     const str1 = "sqrtacosasinatan";
     const str2 = "cossintanlog";
-    const str3 = "modinfnan";
+    const str3 = "modnan";
 
     if (str1.includes(this.state.result.slice(size - 5, size - 1)) && size > 4) {
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 5),
-      }));
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 5), }));
       this.open_brackets_count -= 1;
     } else if (str2.includes(this.state.result.slice(size - 4, size - 1)) && size > 3) {
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 4),
-      }));
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 4), }));
       this.open_brackets_count -= 1;
     } else if (this.state.result.slice(size - 3, size) === "ln(") {
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 3),
-      }));
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 3), }));
       this.open_brackets_count -= 1;
-    } else if (this.state.result.slice(size - 4, size) === "-inf") {
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 4),
-      }));
+    } else if (this.state.result.slice(size - 9, size) === "-Infinity") {
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 9), }));
+    } else if (this.state.result.slice(size - 8, size) === "Infinity") {
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 8), }));
     } else if (str3.includes(this.state.result.slice(size - 3, size).toLocaleLowerCase())) {
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 3),
-      }));
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 3), }));
     } else {
       if (this.state.result.slice(size - 1, size) === "(") {
         this.open_brackets_count -= 1;
       } else if (this.state.result[size - 1] === ")") {
         this.close_brackets_count -= 1;
       }
-      this.setState((prevState) => ({
-        result: prevState.result.slice(0, size - 1),
-      }));
+      this.setState((prevState) => ({ result: prevState.result.slice(0, size - 1), }));
     }
-
     this.WhatPressed();
   };
 
@@ -298,7 +293,7 @@ class Calculator extends Component {
       } else if (this.state.result[size - 1] === 'e') {
         this.is_e = true;
       } else if (this.state.result.slice(size - 1) === '-') {
-        const signs = "*÷m";
+        const signs = "*/m";
         if (signs.includes(this.state.result[size - 2])) this.is_minus = true;
       } else {
         this.is_sign = true;
@@ -321,13 +316,7 @@ class Calculator extends Component {
           <div className="btn.none empty"></div>
           <div id="btn_clean_one" className="btn cleanOne" onClick={() => this.cleanOnePressed()}>{"<--"}</div>
           <div id="btn_clean_all" className="btn cleanAll" onClick={() => this.cleanAllPressed()}>AC</div>
-
-          <form action="/graph">
-            <input id="graphId" type="hidden" name="expression" value=""></input>
-            <button id="btn_graph" className="btn graph bg-green" type="submit">graph</button>
-          </form>
-
-
+          <Link to={`/graph?expression=${this.state.result}`}>Build Graph</Link>
           <div id="btn_x" className="btn x bg-grey" onClick={() => this.xPressed()}>x</div>
           <div id="btn_e" className="btn e bg-grey" onClick={() => this.digitPressed("e")}>e</div>
           <div id="btn_bracket_open" className="btn bracketOpen" onClick={() => this.bracketOpenPressed()}>(</div>
@@ -341,7 +330,7 @@ class Calculator extends Component {
           <div id="btn_7" className="btn seven" onClick={() => this.digitPressed("7")}>7</div>
           <div id="btn_8" className="btn eight" onClick={() => this.digitPressed("8")}>8</div>
           <div id="btn_9" className="btn nine" onClick={() => this.digitPressed("9")}>9</div>
-          <div id="btn_division" className="btn division bg-orange" onClick={() => this.signPressed("÷")}>÷</div>
+          <div id="btn_division" className="btn division bg-orange" onClick={() => this.signPressed("/")}>÷</div>
 
           <div id="btn_sin" className="btn sin bg-grey" onClick={() => this.functionPressed("sin(")}>sin</div>
           <div id="btn_cos" className="btn cos bg-grey" onClick={() => this.functionPressed("cos(")}>cos</div>
@@ -360,7 +349,7 @@ class Calculator extends Component {
           <div id="btn_minus" className="btn minus bg-orange" onClick={() => this.signPressed("-")}>-</div>
 
           <div className="inputX ">
-            <label for="inX">x = </label> <input className="inX" id="inX" type="text" name="inX" value="1.0"></input>
+            <label htmlFor="inX">x = </label> <input className="inX" id="inX" type="text" name="inX" value={this.state.x} onChange={this.handleInputChange}></input>
           </div>
           <div id="btn_0" className="btn zero" onClick={() => this.nullPressed()}>0</div>
           <div id="btn_dot" className="btn dot" onClick={() => this.dotPressed()}>.</div>
@@ -370,6 +359,7 @@ class Calculator extends Component {
             <button id="btn_equal" className="btn equal bg-red" type="submit">=</button>
           </form>
           <div id="btn_plus" className="btn plus bg-orange" onClick={() => this.signPressed("+")}>+</div>
+          {/* <Link to={`/graph?expression=${this.state.result}`}>Go to Graph</Link> */}
         </div>
       </div>
     );
@@ -377,3 +367,5 @@ class Calculator extends Component {
 }
 
 export default Calculator;
+// export default withRouter(Calculator); // Оберните компонент Calculator в withRouter
+

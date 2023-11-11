@@ -12,7 +12,9 @@ double SmartCalcModel::GetCalcResult(std::string input) {
     std::cout<<"HEREEERERERERERER"<<std::endl;
     std::string output = ConvertToRPN(std::move(input));
     double res = CalculateOnStack(output);
-    return res;
+    int precision = 7;  
+    double roundedValue = std::round(res * std::pow(10, precision)) / std::pow(10, precision);
+    return roundedValue;
 }
 
 std::string SmartCalcModel::GetMonthPayment() { return month_payment_; }
