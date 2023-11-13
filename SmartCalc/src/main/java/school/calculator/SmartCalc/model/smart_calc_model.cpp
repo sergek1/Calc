@@ -9,7 +9,6 @@ SmartCalcModel::SmartCalcModel(double credit_amount, int months, double interest
 }
 
 double SmartCalcModel::GetCalcResult(std::string input) {
-    std::cout<<"HEREEERERERERERER"<<std::endl;
     std::string output = ConvertToRPN(std::move(input));
     double res = CalculateOnStack(output);
     int precision = 7;  
@@ -135,7 +134,7 @@ void SmartCalcModel::Brackets(std::stack<char> *stack, std::string *output) {
 }
 
 void SmartCalcModel::OperationsAndFunctions(char sym, std::stack<char> *stack, std::string *output) {
-    std::cout<<"OperationsAndFunctions"<<std::endl;
+    // std::cout<<"OperationsAndFunctions"<<std::endl;
     char b = stack->top();
     std::string signs = "/*m^uabcdfghjk", signs1 = "+-/*m^uabcdfghjk";
     if (sym == '/' || sym == '*' || sym == 'm') {
@@ -213,7 +212,7 @@ void SmartCalcModel::CalcUnaryOperations(char sym, std::stack<double> *stack) {
     double a = stack->top();
     stack->pop();
     if (sym == 'a') {
-        std::cout<<"cos"<<std::endl;
+        // std::cout<<"cos"<<std::endl;
         a = cos(a);
     } else if (sym == 'b') {
         a = sin(a);

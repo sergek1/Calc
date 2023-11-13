@@ -1,39 +1,70 @@
 import React, { Component } from "react";
 import Chart from "chart.js/auto";
+import '../css/graph.css'
 
 class Graph extends Component {
     constructor(props) {
         super(props);
         this.state = {
             expression: "",
+            xMin: -10.0,
+            xMax: 10.0,
+            yMin: -10.0,
+            yMax: 10.0,
+            isInit: true
         };
     }
+
     chartRef = React.createRef();
 
     makeRequest = (expression) => {
         let encodedExpression = encodeURIComponent(expression);
-        let url = `http://localhost:8080/graph?expression=${encodedExpression}`;
+        let url = `http://localhost:8080/graph?expression=${encodedExpression}&xMinStr=${this.state.xMin.toString()}&xMaxStr=${this.state.xMax.toString()}`;
 
-        // this.setState(() => ({ expression: expression }));
         fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })
-            .then(response => response.text())
-            .then((body) => {
-                console.log(body + "body");
-                // this.setState(() => ({ expression: body }));
+            .then(response => response.json())
+            .then((data) => {
+                const xValues = data.x;
+                const yValues = data.y;
+                const minX = Math.min(...xValues);
+                console.log(minX + "minX");
+                const maxX = Math.max(...xValues);
+                console.log(maxX + "maxX");
+                this.setState(() => ({ xMin: minX, xMax: maxX }));
+
+                if (this.state.isInit) {
+                    const minY = Math.min(...yValues);
+                    const maxY = Math.max(...yValues);
+                    console.log(minY + "minY" + maxY + "maxY");
+                    this.setState(() => ({ yMin: minY, yMax: maxY, isInit: false }));
+                }
+
+                this.buildChart(xValues, yValues);
             });
     }
+
+    resetYAxis = () => {
+        const xMin = document.getElementById("x_min").value;
+        const xMax = document.getElementById("x_max").value;
+        const yMin = document.getElementById("y_min").value;
+        const yMax = document.getElementById("y_max").value;
+        this.setState({ xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax },()=>{
+            this.makeRequest(this.state.expression);
+
+        });
+    }
+
     componentDidMount() {
         const searchParams = new URLSearchParams(window.location.search);
         const expression = searchParams.get('expression');
         this.setState(() => ({ expression: expression }));
-        this.buildChart();
         this.makeRequest(expression);
     }
 
-    buildChart() {
+    buildChart(xValues, yValues) {
         const ctx = this.chartRef.current.getContext("2d");
         if (this.chart) {
             this.chart.destroy();
@@ -41,11 +72,11 @@ class Graph extends Component {
         this.chart = new Chart(ctx, {
             type: "line",
             data: {
-                labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5"],
+                labels: xValues,
                 datasets: [
                     {
-                        label: "Dataset Label",
-                        data: [3, 5, 2, 8, 1],
+                        label: this.state.expression,
+                        data: yValues,
                         backgroundColor: "rgba(75, 192, 192, 0.2)",
                         borderColor: "rgba(75, 192, 192, 1)",
                         borderWidth: 1,
@@ -53,7 +84,32 @@ class Graph extends Component {
                 ],
             },
             options: {
-                // Параметры настройки графика
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                    },
+                    y: {
+                        min: this.state.yMin,
+                        max: this.state.yMax,
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                const numberValue = Number(value); // Преобразование в число
+                                return numberValue.toFixed(0); // Округляем значение до целого
+                            }
+                        }
+                    },
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 16, // Устанавливаем размер шрифта
+                                family: 'Arial', // Устанавливаем семейство шрифта
+                            },
+                        },
+                    },
+                },
             },
         });
     }
@@ -61,9 +117,38 @@ class Graph extends Component {
     render() {
 
         return (
-            <div>
-                <h1>Expression: {this.state.expression}</h1>
-                <canvas ref={this.chartRef} width={400} height={400}></canvas>
+            <div className="graph">
+
+                <canvas ref={this.chartRef}></canvas>
+
+                <div className="row">
+                    <div className="input">
+                        <label>x min = </label>
+                        <input className="inX" id="x_min" type="number" name="inX" step="1" defaultValue={this.state.xMin} />
+                    </div>
+                    <div className="input">
+                        <label>x max = </label>
+                        <input className="inX" id="x_max" type="number" name="inX" step="1" defaultValue={this.state.xMax} />
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="input">
+                        <label>y min = </label>
+                        <input className="inX" id="y_min" type="number" name="inX" step="1" value={this.state.yMin}
+                            onChange={(e) => this.setState({ yMin: e.target.value })} />
+                    </div>
+                    <div className="input">
+                        <label>y max = </label>
+                        <input className="inX" id="y_max" type="number" name="inX" step="1" value={this.state.yMax}
+                            onChange={(e) => this.setState({ yMax: e.target.value })} />
+                    </div>
+                </div>
+
+                <button className="button" onClick={() => {
+
+                    this.resetYAxis()
+                }}>Вычислить</button>
             </div>
         );
     }

@@ -63,10 +63,6 @@ class Calculator extends Component {
     }
   }
 
-  handleGraphButtonClick = () => {
-    this.props.history.push(`/graph?expression=${this.state.result}`);
-
-  };
 
   digitPressed = (key) => {
     const size = this.state.result.length;
@@ -316,7 +312,19 @@ class Calculator extends Component {
           <div className="btn.none empty"></div>
           <div id="btn_clean_one" className="btn cleanOne" onClick={() => this.cleanOnePressed()}>{"<--"}</div>
           <div id="btn_clean_all" className="btn cleanAll" onClick={() => this.cleanAllPressed()}>AC</div>
-          <Link to={`/graph?expression=${this.state.result}`}>Build Graph</Link>
+          <div>
+            <Link to={`/graph?expression=${
+              this.state.result
+              // (function () {
+              //   let customVar = this.state.result;
+              //   const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
+              //   this.state.result = customVar+additionalBrackets;
+              // //   // Выполните здесь любые другие операции с customVar, если необходимо
+              //   //  this.state.result = "";
+              // })()
+              }`}>Build Graph</Link>
+            {/* <button onClick={this.handleBuildGraphClick}>Build Graph</button> */}
+          </div>
           <div id="btn_x" className="btn x bg-grey" onClick={() => this.xPressed()}>x</div>
           <div id="btn_e" className="btn e bg-grey" onClick={() => this.digitPressed("e")}>e</div>
           <div id="btn_bracket_open" className="btn bracketOpen" onClick={() => this.bracketOpenPressed()}>(</div>
