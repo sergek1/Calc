@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import Info from './info';
+import History from './history';
 
 class Calculator extends Component {
+  calculatorRef = React.createRef();
   constructor(props) {
     super(props);
     this.state = {
-      expression: '9',
+      expression: '0',
       result: "0",
-      x: "1"
+      x: "1",
     };
+
     this.digit = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     this.is_digit = true;
     this.is_sign = false;
@@ -24,6 +26,12 @@ class Calculator extends Component {
     this.close_brackets_count = 0;
     this.point = '.';
   }
+
+  updateExpression = (newExpression) => {
+    this.setState({ result: newExpression });
+  };
+
+
 
   handleFormSubmit = (event) => {
     const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
@@ -65,6 +73,7 @@ class Calculator extends Component {
 
 
   digitPressed = (key) => {
+    this.WhatPressed();
     const size = this.state.result.length;
     if (key === 'e') {
       if (!this.is_e && !this.is_sign && this.state.result.substring(size - 1, size) !== 'e' && this.is_digit) {
@@ -297,6 +306,7 @@ class Calculator extends Component {
     }
   };
 
+
   render() {
     return (
       <div className="calculator">
@@ -313,17 +323,7 @@ class Calculator extends Component {
           <div id="btn_clean_one" className="btn cleanOne" onClick={() => this.cleanOnePressed()}>{"<--"}</div>
           <div id="btn_clean_all" className="btn cleanAll" onClick={() => this.cleanAllPressed()}>AC</div>
           <div>
-            <Link to={`/graph?expression=${
-              this.state.result
-              // (function () {
-              //   let customVar = this.state.result;
-              //   const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
-              //   this.state.result = customVar+additionalBrackets;
-              // //   // Выполните здесь любые другие операции с customVar, если необходимо
-              //   //  this.state.result = "";
-              // })()
-              }`}>Build Graph</Link>
-            {/* <button onClick={this.handleBuildGraphClick}>Build Graph</button> */}
+            <Link to={`/graph?expression=${this.state.result}`} className="link">Build Graph</Link>
           </div>
           <div id="btn_x" className="btn x bg-grey" onClick={() => this.xPressed()}>x</div>
           <div id="btn_e" className="btn e bg-grey" onClick={() => this.digitPressed("e")}>e</div>
@@ -367,7 +367,6 @@ class Calculator extends Component {
             <button id="btn_equal" className="btn equal bg-red" type="submit">=</button>
           </form>
           <div id="btn_plus" className="btn plus bg-orange" onClick={() => this.signPressed("+")}>+</div>
-          {/* <Link to={`/graph?expression=${this.state.result}`}>Go to Graph</Link> */}
         </div>
       </div>
     );

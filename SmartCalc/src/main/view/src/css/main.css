@@ -1,3 +1,27 @@
+.calculator-row {
+    display: flex;
+}
+
+.calculator-row>div {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.calculator-column {
+    display: flex;
+}
+
+.calculator-column>div {
+
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+
 .calculator {
     margin: 30px auto;
     width: 450px;
@@ -20,12 +44,11 @@
     margin-bottom: 10px;
     padding: 10px;
     padding-top: 3px;
-
     display: grid;
     justify-items: end;
-    /* align-items: end; */
     font-size: 1.5rem;
 }
+
 .p1 {
     color: #a6a6a6;
     font-size: 1rem;
@@ -105,4 +128,10 @@
 
 .btn.bg-green {
     background: #2d4e21;
+}
+
+.link {
+    color: red;
+    text-align: center;
+    display: block;
 }

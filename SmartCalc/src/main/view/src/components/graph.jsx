@@ -51,15 +51,24 @@ class Graph extends Component {
         const xMax = document.getElementById("x_max").value;
         const yMin = document.getElementById("y_min").value;
         const yMax = document.getElementById("y_max").value;
-        this.setState({ xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax },()=>{
+        this.setState({ xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax }, () => {
             this.makeRequest(this.state.expression);
-
         });
     }
 
     componentDidMount() {
         const searchParams = new URLSearchParams(window.location.search);
-        const expression = searchParams.get('expression');
+        let expression = searchParams.get('expression');
+        const openBracket = new RegExp("\\(", 'g');
+        const matchesOpenBracket = expression.match(openBracket);
+        const countOpenBracket = matchesOpenBracket ? matchesOpenBracket.length : 0;
+
+        const closeBracket = new RegExp("\\)", 'g');
+        const matchesCloseBracket = expression.match(closeBracket);
+        const countCloseBracket = matchesCloseBracket ? matchesCloseBracket.length : 0;
+
+        const additionalBrackets = ')'.repeat(countOpenBracket - countCloseBracket)
+        expression += additionalBrackets;
         this.setState(() => ({ expression: expression }));
         this.makeRequest(expression);
     }
@@ -94,8 +103,8 @@ class Graph extends Component {
                         beginAtZero: true,
                         ticks: {
                             callback: function (value) {
-                                const numberValue = Number(value); // Преобразование в число
-                                return numberValue.toFixed(0); // Округляем значение до целого
+                                const numberValue = Number(value);
+                                return numberValue.toFixed(2);
                             }
                         }
                     },
@@ -104,8 +113,8 @@ class Graph extends Component {
                     legend: {
                         labels: {
                             font: {
-                                size: 16, // Устанавливаем размер шрифта
-                                family: 'Arial', // Устанавливаем семейство шрифта
+                                size: 16,
+                                family: 'Arial',
                             },
                         },
                     },
@@ -118,9 +127,7 @@ class Graph extends Component {
 
         return (
             <div className="graph">
-
-                <canvas ref={this.chartRef}></canvas>
-
+                <canvas ref={this.chartRef} width={600} height={600}></canvas>
                 <div className="row">
                     <div className="input">
                         <label>x min = </label>
