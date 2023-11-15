@@ -1,0 +1,33 @@
+.history {
+    margin: 10px auto;
+    border: 1px solid #000;
+    border-radius: 10px;
+    font-family: Arial;
+    padding: 10px;
+    box-shadow: 4px 4px 4px #4f4f4f;
+}
+
+.history-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.history-item {
+    margin-bottom: 5px;
+}
+
+.history-item:hover {
+    background-color: #a6a6a6;
+}
+
+.history-item:active {
+    filter: brightness(90%);
+}
+
+.history-buttons {
+    margin-top: 10px;
+}
+
+.history-button {
+    margin-right: 10px;
+}

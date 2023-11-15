@@ -1,0 +1,23 @@
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 10px;
+    font-family: Arial;
+    padding: 10px;
+    box-shadow: 4px 4px 4px #4f4f4f;
+}
+
+.info p {
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+.image {
+    max-width: 300px;
+    max-height: 300px;
+}

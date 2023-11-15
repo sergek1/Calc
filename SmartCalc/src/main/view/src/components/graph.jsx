@@ -17,6 +17,23 @@ class Graph extends Component {
 
     chartRef = React.createRef();
 
+    componentDidMount() {
+        const searchParams = new URLSearchParams(window.location.search);
+        let expression = searchParams.get('expression');
+        const openBracket = new RegExp("\\(", 'g');
+        const matchesOpenBracket = expression.match(openBracket);
+        const countOpenBracket = matchesOpenBracket ? matchesOpenBracket.length : 0;
+
+        const closeBracket = new RegExp("\\)", 'g');
+        const matchesCloseBracket = expression.match(closeBracket);
+        const countCloseBracket = matchesCloseBracket ? matchesCloseBracket.length : 0;
+
+        const additionalBrackets = ')'.repeat(countOpenBracket - countCloseBracket)
+        expression += additionalBrackets;
+        this.setState(() => ({ expression: expression }));
+        this.makeRequest(expression);
+    }
+
     makeRequest = (expression) => {
         let encodedExpression = encodeURIComponent(expression);
         let url = `http://localhost:8080/graph?expression=${encodedExpression}&xMinStr=${this.state.xMin.toString()}&xMaxStr=${this.state.xMax.toString()}`;
@@ -56,22 +73,7 @@ class Graph extends Component {
         });
     }
 
-    componentDidMount() {
-        const searchParams = new URLSearchParams(window.location.search);
-        let expression = searchParams.get('expression');
-        const openBracket = new RegExp("\\(", 'g');
-        const matchesOpenBracket = expression.match(openBracket);
-        const countOpenBracket = matchesOpenBracket ? matchesOpenBracket.length : 0;
-
-        const closeBracket = new RegExp("\\)", 'g');
-        const matchesCloseBracket = expression.match(closeBracket);
-        const countCloseBracket = matchesCloseBracket ? matchesCloseBracket.length : 0;
-
-        const additionalBrackets = ')'.repeat(countOpenBracket - countCloseBracket)
-        expression += additionalBrackets;
-        this.setState(() => ({ expression: expression }));
-        this.makeRequest(expression);
-    }
+    
 
     buildChart(xValues, yValues) {
         const ctx = this.chartRef.current.getContext("2d");
@@ -155,7 +157,7 @@ class Graph extends Component {
                 <button className="button" onClick={() => {
 
                     this.resetYAxis()
-                }}>Вычислить</button>
+                }}>Calculate</button>
             </div>
         );
     }

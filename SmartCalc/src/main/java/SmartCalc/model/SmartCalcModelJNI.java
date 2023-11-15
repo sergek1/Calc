@@ -1,14 +1,12 @@
-package school.calculator.SmartCalc.model;
-
-import org.springframework.stereotype.Component;
+package SmartCalc.model;
 
 import java.io.File;
 
-//@Component
 public class SmartCalcModelJNI {
     static {
-        String parentDir = "src/main/java/school/calculator/SmartCalc/model/";
+        String parentDir = "src/main/java/SmartCalc/model/";
         System.load(new File(parentDir, "model.so").getAbsolutePath());
     }
+
     public native double GetCalcResult(String input);
 }

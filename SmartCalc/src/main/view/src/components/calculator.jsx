@@ -28,10 +28,10 @@ class Calculator extends Component {
   }
 
   updateExpression = (newExpression) => {
-    this.setState({ result: newExpression });
+    const indexOfEqualSign = newExpression.indexOf('=');
+    const extractedSubstring = (indexOfEqualSign!=-1)? newExpression.substring(0, indexOfEqualSign):newExpression;
+    this.setState({ result: extractedSubstring, expression: extractedSubstring+"=" });
   };
-
-
 
   handleFormSubmit = (event) => {
     const additionalBrackets = ')'.repeat(this.open_brackets_count - this.close_brackets_count);
@@ -323,7 +323,7 @@ class Calculator extends Component {
           <div id="btn_clean_one" className="btn cleanOne" onClick={() => this.cleanOnePressed()}>{"<--"}</div>
           <div id="btn_clean_all" className="btn cleanAll" onClick={() => this.cleanAllPressed()}>AC</div>
           <div>
-            <Link to={`/graph?expression=${this.state.result}`} className="link">Build Graph</Link>
+            <Link to={`/graphLink?expression=${this.state.result}`} className="link">Build Graph</Link>
           </div>
           <div id="btn_x" className="btn x bg-grey" onClick={() => this.xPressed()}>x</div>
           <div id="btn_e" className="btn e bg-grey" onClick={() => this.digitPressed("e")}>e</div>

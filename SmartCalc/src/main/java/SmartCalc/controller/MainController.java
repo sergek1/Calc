@@ -1,15 +1,13 @@
-package school.calculator.SmartCalc.controller;
+package SmartCalc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.calculator.SmartCalc.model.SmartCalcModel;
-import school.calculator.SmartCalc.model.SmartCalcModelJNI;
-import school.calculator.SmartCalc.service.ServiceUtil;
+import SmartCalc.model.SmartCalcModel;
+import SmartCalc.service.ServiceUtil;
 
-import java.lang.Math;
 import java.util.*;
 
 @RestController
@@ -47,7 +45,7 @@ public class MainController {
             System.out.println("xMini: " + xMin);
             System.out.println("xMax: " + xMax);
             Map<String, List<Double>> data = model.getGraphData(expression, xMin, xMax);
-
+            serviceUtil.saveGraphToHistory(expression);
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(data);
             return ResponseEntity.ok(json);
@@ -64,6 +62,17 @@ public class MainController {
             return ResponseEntity.ok(history);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @DeleteMapping("/deleteHistory")
+    @ResponseBody
+    public ResponseEntity<String> deleteHistory() {
+        try {
+            serviceUtil.deleteHistory();
+            return ResponseEntity.ok("History deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
 }

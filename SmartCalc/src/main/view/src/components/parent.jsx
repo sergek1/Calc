@@ -11,17 +11,17 @@ class Parent extends Component {
         this.state = {
             showInfo: false,
             showHistory: false,
+            showGraph: false,
         }
     }
     handleHistoryItemClick = (selectedExpression) => {
-        // Обновляем выражение в Calculator, когда выбран элемент истории
         this.calculatorRef.updateExpression(selectedExpression);
     };
     handleInfoClick = () => {
         this.setState({ showInfo: true });
     }
 
-    handleCloseInfo = () => {
+    handleInfoClose = () => {
         this.setState({ showInfo: false });
     }
 
@@ -29,25 +29,38 @@ class Parent extends Component {
         this.setState({ showHistory: true });
     }
 
-    handleCloseHistory = () => {
+    handleHistoryClose = () => {
         this.setState({ showHistory: false });
     }
+
+    handleGraphClick = () => {
+        this.setState({ showGraph: true });
+    }
+
+    handleGraphClose = () => {
+        this.setState({ showGraph: false });
+    }
+
 
     render() {
         return (
             <div className='calculator-row'>
                 
                 <div className='calculator-column'>
+                    
                     <div style={{ display: 'flex' }}>
                         <Link to="#" onClick={this.handleInfoClick}>Info</Link>
-                        {this.state.showInfo && <Info onItemClick={this.handleHistoryItemClick} onClose={this.handleCloseInfo} />}
+                        {this.state.showInfo && <Info onClose={this.handleInfoClose} />}
                     </div>
+                   
                     <div style={{ display: 'flex' }}>
                         <Link to="#" onClick={this.handleHistoryClick}>History</Link>
-                        {this.state.showHistory && <History onItemClick={this.handleHistoryItemClick} onClose={this.handleCloseHistory} />}
+                        {this.state.showHistory && <History onItemClick={this.handleHistoryItemClick} onClose={this.handleHistoryClose} />}
                     </div>
                 </div>
+
                 <Calculator ref={(ref) => (this.calculatorRef = ref)} />
+                
             </div>
         );
     }

@@ -1,4 +1,4 @@
-package school.calculator.SmartCalc.model;
+package SmartCalc.model;
 
 import org.springframework.stereotype.Component;
 

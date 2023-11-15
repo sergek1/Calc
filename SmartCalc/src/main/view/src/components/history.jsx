@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../css/history.css'
 
 class History extends Component {
     constructor(props) {
@@ -17,33 +18,45 @@ class History extends Component {
       };
 
     loadHistory = async()=>{
-        // try{
-            const url = 'http://localhost:8080/history';
-            const response = await fetch(url);
-            if (response.ok){
-                const data = await response.json();
-                this.setState({history:data});
-            } else {
-                console.log('Failed to load history');
-            }
-            
-        // }
-        // catch(){
+        const url = 'http://localhost:8080/history';
+        const response = await fetch(url);
+        if (response.ok){
+            const data = await response.json();
+            this.setState({history:data});
+        } else {
+            console.log('Failed to load history');
+        }
+    }
 
-        // }
+    deleteHistory = async () => {
+        const url = 'http://localhost:8080/deleteHistory';
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log('History deleted successfully');
+                this.loadHistory();
+            } else {
+                console.log('Failed to delete history');
+            }
     }
 
     render() {
         return (
-            <div>
-                <h1>History</h1>
-                {/* Ваш код компонента Info */}
-                <ul>
+            <div className="history">
+                <ul className="history-list">
                     {this.state.history.map((expression, index)=>(
-                        <li key={index} onClick={()=>this.handleItemClick(expression)}>{expression}</li>
+                        <li className="history-item" key={index} onClick={()=>this.handleItemClick(expression)}>{expression}</li>
                     ))}
                 </ul>
-                <button onClick={this.props.onClose}>Закрыть</button>
+                <div className="history-buttons">
+                    <button className="history-button" onClick={this.deleteHistory}>Delete History</button>
+                    <button className="history-button" onClick={this.props.onClose}>Close</button>
+                </div>
             </div>
         );
     }
