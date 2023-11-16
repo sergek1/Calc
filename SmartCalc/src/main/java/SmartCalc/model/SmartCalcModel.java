@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Component
 public class SmartCalcModel {
+    
     SmartCalcModelJNI smartCalcModelJNI = new SmartCalcModelJNI();
     public double GetCalcResult(String expression) {
         String transformString = transformString(expression);
