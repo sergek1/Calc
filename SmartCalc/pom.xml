@@ -8,12 +8,13 @@
 		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.calculator</groupId>
+	<groupId>SmartCalc</groupId>
 	<artifactId>SmartCalc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SmartCalc</name>
 	<description>SmartCalc project</description>
 	<properties>
+		<os.name>${os.name}</os.name>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -30,6 +31,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
@@ -45,11 +52,7 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+		
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
@@ -73,7 +76,84 @@
 				</configuration>
 			</plugin>
 			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<mkdir dir="target/classes/SmartCalc/" />
+								<exec executable="g++">
+									<arg value="-std=c++17" />
+									<arg value="-shared" />
+									<arg value="-fPIC" />
+									<arg value="-I${jni.include.path}" />
+									<arg value="-I${jni.include.path.linux}" />
+									<arg value="-I${jni.include.path.darwin}" />
+									<arg value="-I${jni.include.path}" />
+									<arg value="-I${jni.include.path.win}" />
+									<arg value="-o" />
+									<arg value="target/classes/SmartCalc/model.so" />
+									<arg
+										value="${project.basedir}/src/main/java/SmartCalc/model/smart_calc_model.cpp" />
+									<arg
+										value="${project.basedir}/src/main/java/SmartCalc/model/SmartCalc_model_SmartCalcModelJNI.cpp" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
 		</plugins>
 	</build>
+	
+	
+	<profiles>
+		<profile>
+			<id>linux-build</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<jni.include.path>/usr/lib/jvm/java-17-openjdk-amd64/include</jni.include.path>
+				<jni.include.path.linux>/usr/lib/jvm/java-17-openjdk-amd64/include/linux</jni.include.path.linux>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>windows-build</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<jni.include.path>${java.home}/include</jni.include.path>
+				<jni.include.path.win>${java.home}/include/win32</jni.include.path.win>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>mac-build</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<jni.include.path>${java.home}/include</jni.include.path>
+				<jni.include.path.darwin>${java.home}/include/darwin</jni.include.path.darwin>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>

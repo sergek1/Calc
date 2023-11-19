@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
 import Graph from './components/graph';
-import Info from './components/info';
 import Parent from './components/parent'
 
 function App() {

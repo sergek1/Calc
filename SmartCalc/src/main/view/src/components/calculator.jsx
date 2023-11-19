@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import Info from './info';
-import History from './history';
 
 class Calculator extends Component {
   calculatorRef = React.createRef();
@@ -29,7 +27,7 @@ class Calculator extends Component {
 
   updateExpression = (newExpression) => {
     const indexOfEqualSign = newExpression.indexOf('=');
-    const extractedSubstring = (indexOfEqualSign!=-1)? newExpression.substring(0, indexOfEqualSign):newExpression;
+    const extractedSubstring = (indexOfEqualSign!==-1)? newExpression.substring(0, indexOfEqualSign):newExpression;
     this.setState({ result: extractedSubstring, expression: extractedSubstring+"=" });
   };
 
