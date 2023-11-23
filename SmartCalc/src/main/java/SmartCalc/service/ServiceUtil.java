@@ -16,6 +16,7 @@ public class ServiceUtil {
             PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH, true));
             writer.println(expression + "=" + result);
             writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -26,6 +27,7 @@ public class ServiceUtil {
             PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH, true));
             writer.println(expression);
             writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +41,7 @@ public class ServiceUtil {
             while ((line = reader.readLine()) != null) {
                 history.add(line);
             }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

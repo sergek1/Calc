@@ -39,31 +39,31 @@ public class SmartCalcModel {
     int i = 0;
     while (i < input.length()) {
       if (input.startsWith("acos", i)) {
-        result.append("d(");
+        result.append("d");
         i += 4;
       } else if (input.startsWith("asin", i)) {
-        result.append("f(");
+        result.append("f");
         i += 4;
       } else if (input.startsWith("atan", i)) {
-        result.append("g(");
+        result.append("g");
         i += 4;
       } else if (input.startsWith("cos", i)) {
-        result.append("a(");
+        result.append("a");
         i += 3;
       } else if (input.startsWith("sin", i)) {
-        result.append("b(");
+        result.append("b");
         i += 3;
       } else if (input.startsWith("tan", i)) {
-        result.append("c(");
+        result.append("c");
         i += 3;
       } else if (input.startsWith("sqrt", i)) {
-        result.append("h(");
+        result.append("h");
         i += 4;
       } else if (input.startsWith("ln", i)) {
-        result.append("j(");
+        result.append("j");
         i += 2;
       } else if (input.startsWith("log", i)) {
-        result.append("k(");
+        result.append("k");
         i += 3;
       } else if (input.startsWith("mod", i)) {
         result.append("m");

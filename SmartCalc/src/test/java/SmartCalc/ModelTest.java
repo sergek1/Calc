@@ -10,11 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import SmartCalc.model.SmartCalcModel;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ModelTest {
@@ -36,9 +32,9 @@ public class ModelTest {
     double xMax = 1;
 
     List<Number> expectedXValues =
-        Arrays.asList(-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0);
+        Arrays.asList(-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0);
     List<Number> expectedYValues =
-        Arrays.asList(0.0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2.0);
+        Arrays.asList(0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0);
 
     Map<String, List<Double>> result =
         model.getGraphData(expression, xMin, xMax);

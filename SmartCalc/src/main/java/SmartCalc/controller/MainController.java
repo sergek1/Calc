@@ -40,9 +40,6 @@ public class MainController {
         try {
             double xMin = Double.parseDouble(xMinStr);
             double xMax = Double.parseDouble(xMaxStr);
-            System.out.println("graph for: " + expression);
-            System.out.println("xMini: " + xMin);
-            System.out.println("xMax: " + xMax);
             Map<String, List<Double>> data = model.getGraphData(expression, xMin, xMax);
             serviceUtil.saveGraphToHistory(expression);
             ObjectMapper objectMapper = new ObjectMapper();
