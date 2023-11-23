@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     margin-left: 20px;
+    margin-right: 20px;
 }
 
 .calculator-column {
@@ -13,7 +14,6 @@
 }
 
 .calculator-column>div {
-
     margin-top: 15px;
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@
 .buttons {
     display: grid;
     grid-template-areas:
-        "graph x e bracketLeft bracketRight pow mod"
+        "empty x e bracketLeft bracketRight pow mod"
         "sqrt ln log seven eight nine division"
         "sin cos tan four five six multiply"
         "asin acos atan one two three minus"

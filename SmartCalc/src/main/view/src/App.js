@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Route,Routes } from 'react-router-dom';
-import Graph from './components/graph';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import Parent from './components/parent'
 
 function App() {
@@ -9,8 +8,7 @@ function App() {
     <HashRouter>
       <div>
         <Routes>
-          <Route path="/" element={<Parent/>} />
-          <Route path="/graphLink" element={<Graph/>} />
+          <Route exact path="/"  element={<Parent/>} />
         </Routes>
       </div>
     </HashRouter>

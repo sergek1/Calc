@@ -1,4 +1,4 @@
-package com.calculator.SmartCalc;
+package SmartCalc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

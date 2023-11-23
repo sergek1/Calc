@@ -18,8 +18,8 @@ class Graph extends Component {
     chartRef = React.createRef();
 
     componentDidMount() {
-        const searchParams = new URLSearchParams(window.location.search);
-        let expression = searchParams.get('expression');
+
+        let expression = this.props.expression;
         const openBracket = new RegExp("\\(", 'g');
         const matchesOpenBracket = expression.match(openBracket);
         const countOpenBracket = matchesOpenBracket ? matchesOpenBracket.length : 0;
@@ -158,6 +158,7 @@ class Graph extends Component {
 
                     this.resetYAxis()
                 }}>Calculate</button>
+                <button  onClick={this.props.onClose}>Close</button>
             </div>
         );
     }

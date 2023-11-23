@@ -1,7 +1,7 @@
 .graph {
-    margin: 30px auto;
+    margin: 15px auto;
     width: 700px;
-    height: 820px;
+    height: 790px;
     border: 1px solid #000;
     border-radius: 20px;
     font-family: Arial;
@@ -10,16 +10,19 @@
 }
 
 .row {
-    margin-inline-start: 180px;
+    margin-inline-start: 150px;
     display: flex;
 }
 
 .input {
     display: inline-block;
     margin: 10px;
+    height: 15px;
 }
 
-.button{
+.button {
+    margin: 10px;
+    margin-top: 15px;
     display: inline-block;
-    margin-inline-start: 370px;
+    margin-inline-start: 320px;
 }

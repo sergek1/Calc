@@ -10,14 +10,12 @@ let javaProcess
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 910,
     webPreferences: {
       nodeIntegration: true
     }
   })
-  //win.loadURL(`file://${__dirname}/index.html`)
   win.loadFile(path.join(__dirname, 'index.html'))
-
 }
 
 function StartJavaProcess () {

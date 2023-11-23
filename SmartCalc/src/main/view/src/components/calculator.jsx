@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from 'react-router-dom';
 
 class Calculator extends Component {
   calculatorRef = React.createRef();
@@ -27,8 +26,8 @@ class Calculator extends Component {
 
   updateExpression = (newExpression) => {
     const indexOfEqualSign = newExpression.indexOf('=');
-    const extractedSubstring = (indexOfEqualSign!==-1)? newExpression.substring(0, indexOfEqualSign):newExpression;
-    this.setState({ result: extractedSubstring, expression: extractedSubstring+"=" });
+    const extractedSubstring = (indexOfEqualSign !== -1) ? newExpression.substring(0, indexOfEqualSign) : newExpression;
+    this.setState({ result: extractedSubstring, expression: extractedSubstring + "=" });
   };
 
   handleFormSubmit = (event) => {
@@ -320,9 +319,7 @@ class Calculator extends Component {
           <div className="btn.none empty"></div>
           <div id="btn_clean_one" className="btn cleanOne" onClick={() => this.cleanOnePressed()}>{"<--"}</div>
           <div id="btn_clean_all" className="btn cleanAll" onClick={() => this.cleanAllPressed()}>AC</div>
-          <div>
-            <Link to={`/graphLink?expression=${this.state.result}`} className="link">Build Graph</Link>
-          </div>
+          <div className="btn.none empty"></div>
           <div id="btn_x" className="btn x bg-grey" onClick={() => this.xPressed()}>x</div>
           <div id="btn_e" className="btn e bg-grey" onClick={() => this.digitPressed("e")}>e</div>
           <div id="btn_bracket_open" className="btn bracketOpen" onClick={() => this.bracketOpenPressed()}>(</div>
@@ -372,5 +369,3 @@ class Calculator extends Component {
 }
 
 export default Calculator;
-// export default withRouter(Calculator); // Оберните компонент Calculator в withRouter
-

@@ -6,6 +6,7 @@
 
 #include "smart_calc_model.h"
 
+
 JNIEXPORT jdouble JNICALL
 Java_SmartCalc_model_SmartCalcModelJNI_GetCalcResult(
     JNIEnv* env, jobject object, jstring inputString) {

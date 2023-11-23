@@ -15,14 +15,14 @@ class History extends Component {
 
     handleItemClick = (expression) => {
         this.props.onItemClick(expression);
-      };
+    };
 
-    loadHistory = async()=>{
+    loadHistory = async () => {
         const url = 'http://localhost:8080/history';
         const response = await fetch(url);
-        if (response.ok){
+        if (response.ok) {
             const data = await response.json();
-            this.setState({history:data});
+            this.setState({ history: data });
         } else {
             console.log('Failed to load history');
         }
@@ -30,27 +30,27 @@ class History extends Component {
 
     deleteHistory = async () => {
         const url = 'http://localhost:8080/deleteHistory';
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-            if (response.ok) {
-                console.log('History deleted successfully');
-                this.loadHistory();
-            } else {
-                console.log('Failed to delete history');
-            }
+        if (response.ok) {
+            console.log('History deleted successfully');
+            this.loadHistory();
+        } else {
+            console.log('Failed to delete history');
+        }
     }
 
     render() {
         return (
             <div className="history">
                 <ul className="history-list">
-                    {this.state.history.map((expression, index)=>(
-                        <li className="history-item" key={index} onClick={()=>this.handleItemClick(expression)}>{expression}</li>
+                    {this.state.history.map((expression, index) => (
+                        <li className="history-item" key={index} onClick={() => this.handleItemClick(expression)}>{expression}</li>
                     ))}
                 </ul>
                 <div className="history-buttons">

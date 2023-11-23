@@ -22,8 +22,7 @@ public class MainController {
     @ResponseBody
     public String calculate(@RequestParam String expression) {
         try {
-            System.out.println("{" + expression + "}");
-            double result = model.GetCalcResult(expression);
+            double result = model.getCalcResult(expression);
             serviceUtil.saveHistory(expression, result);
             return String.valueOf(result);
         } catch (Exception e) {

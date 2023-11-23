@@ -1,7 +1,10 @@
 {
   "name": "view",
   "version": "0.1.0",
-  "author": "Sergek",
+  "author": {
+    "name": "Sergek",
+    "email": "serg.seden@yandex.com"
+  },
   "private": true,
   "main": "build/electron.js",
   "homepage": ".",
@@ -31,7 +34,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron build/electron.js",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "eslintConfig": {
     "extends": [
@@ -43,7 +47,7 @@
     "appId": "com.yourapp.id",
     "linux": {
       "target": "deb",
-      "icon": "build/favicon.ico"
+      "icon": "build/images/person.png"
     },
     "files": [
       "build/**/*"
