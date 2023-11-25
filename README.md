@@ -2,7 +2,8 @@
 Расширенная версия обычного калькулятора.
   
 Серверная часть:
-- Spring Boot, Java, RestController;  
+- Spring Boot, Java, RestController;
+
 Клиентская часть:
 - React JS, HTML, CSS, Electron.
 
