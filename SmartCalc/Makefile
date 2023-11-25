@@ -17,7 +17,7 @@ copyfromjar: jar
 	cp $(JAR_FILE) $(PUBLIC_DIR)
 	cp $(JAR_FILE) $(LIBRARIES_DIR)
 
-copycpp:
+copycpp: 
 	cp $(CPP_LIB) $(LIBRARIES_DIR)
 	cp $(CPP_LIB) $(PUBLIC_DIR)
 
