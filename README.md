@@ -5,7 +5,7 @@
 - Spring Boot, Java, RestController;
 
 Клиентская часть:
-- React JS, HTML, CSS, Electron.
+- React JS, JavaScript, HTML, CSS, Electron.
 
 Каждая часть приложения запускается отдельно.  
 Можно запустить на Ubuntu двумя способами.  
