@@ -1,8 +1,13 @@
 # Calculator
 Расширенная версия обычного калькулятора.
+  
+Серверная часть:
+- Spring Boot, Java, RestController;  
+Клиентская часть:
+- React JS, HTML, CSS, Electron.
 
-Программа состоит из серверной и клиентской частей. Каждая часть запускается отдельно.  
-Программу можно запустить на Ubuntu двумя способами.  
+Каждая часть приложения запускается отдельно.  
+Можно запустить на Ubuntu двумя способами.  
 Первый способ:  
 1. Перейти в директорию SmartCalc;
 2. `make` (запуск сервера, формирование установочного файла для клиентской части с расширением .deb)
@@ -24,8 +29,8 @@
 
 <img src="screenshots/3.png" alt="hotels" width="600"/>
 
-<img src="screenshots/4.png" alt="hotels" width="600"/>
+<img src="screenshots/4.png" alt="hotels" width="400"/>
 
-<img src="screenshots/5.png" alt="hotels" width="600"/>
+<img src="screenshots/5.png" alt="hotels" width="800"/>
 
 <img src="screenshots/6.png" alt="hotels" width="600"/>
