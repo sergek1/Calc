@@ -31,6 +31,6 @@
 
 <img src="screenshots/4.png" alt="hotels" width="400"/>
 
-<img src="screenshots/5.png" alt="hotels" width="800"/>
+<img src="screenshots/5.png" alt="hotels" width="1000"/>
 
 <img src="screenshots/6.png" alt="hotels" width="600"/>
